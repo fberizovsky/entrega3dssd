@@ -31,7 +31,6 @@
      - Cuerpo de la solicitud: Datos de la nueva orden.
         ```json
         {
-          "estado": "PENDIENTE",
           "principalDepositId": 1,
           "items": [
             {
