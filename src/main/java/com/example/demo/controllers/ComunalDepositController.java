@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.models.ComunalDeposit;
 import com.example.demo.models.dtos.CrearDepositoComunalDTO;
 import com.example.demo.models.dtos.DevolverDepositoComunalDTO;
+import com.example.demo.models.dtos.DevolverOrdenDTO;
 import com.example.demo.repository.ComunalDepositRepository;
 
 @RestController
@@ -35,7 +36,10 @@ public class ComunalDepositController {
         return depositosComunales.stream()
                 .map(depositoComunal -> new DevolverDepositoComunalDTO(
                         depositoComunal.getId(), 
-                        depositoComunal.getName()))
+                        depositoComunal.getName(),
+                        depositoComunal.getOrders().stream()
+                            .map(orden -> new DevolverOrdenDTO(orden.getId(), orden.getPrincipalDeposit().getName(), orden.getEstado(), orden.getItems()))
+                            .collect(Collectors.toList())))
                 .collect(Collectors.toList());
     }
 

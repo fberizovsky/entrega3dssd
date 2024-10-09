@@ -18,6 +18,8 @@ import com.example.demo.models.Orden;
 import com.example.demo.models.PrincipalDeposit;
 import com.example.demo.models.dtos.CrearOrdenDTO;
 import com.example.demo.models.dtos.DevolverOrdenDTO;
+import com.example.demo.models.enums.Estado;
+import com.example.demo.repository.ComunalDepositRepository;
 import com.example.demo.repository.OrdenRepository;
 import com.example.demo.repository.PrincipalDepositRepository;
 import java.util.stream.Collectors;
@@ -31,7 +33,12 @@ public class OrdenController {
     @Autowired
     private OrdenRepository ordenRepository;
 
-    @Autowired PrincipalDepositRepository principalDepositRepository;
+    @Autowired 
+    private PrincipalDepositRepository principalDepositRepository;
+
+    @Autowired
+    private ComunalDepositRepository comunalDepositRepository;
+
 
 
    
@@ -67,26 +74,61 @@ public class OrdenController {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Reserva una orden cambiando su estado a RESERVADO y asignándole un depósito comunal.
+     *
+     * @param orderId El ID de la orden a reservar.
+     * @return ResponseEntity con un mensaje de error si la orden no se encuentra o no está en estado PENDIENTE,
+     *         o con un objeto DevolverOrdenDTO si la operación es exitosa.
+     */
     @PutMapping("/reservar/{orderId}")
-    public ResponseEntity<?> reservarOrden(@PathVariable Long orderId, @RequestBody ComunalDeposit comunalDeposit) {
-        // Orden orden = ordenRepository.findById(orderId).get();
-        // orden.setComunalDeposit(comunalDeposit);
-        // orden.setEstado(Estado.RESERVADO);
-        // ordenRepository.save(orden);
-        // return ResponseEntity.ok(orden);
-        return ResponseEntity.badRequest().body("No implementado");
+    public ResponseEntity<?> reservarOrden(@PathVariable Long orderId) {
+        Optional<Orden> ordenOptional = ordenRepository.findById(orderId);
+        if (!ordenOptional.isPresent()) {
+            return ResponseEntity.badRequest().body("No se encontró la orden");
+        }
+        Orden orden = ordenOptional.get();
+
+        if (orden.getEstado() != Estado.PENDIENTE) {
+            return ResponseEntity.badRequest().body("La orden no está pendiente");
+        }
+
+        // Cuando haya auth, se debe obtener el deposito comunal del usuario autenticado. La linea siguiente es solo un ejemplo.
+        ComunalDeposit comunalDeposit = comunalDepositRepository.findById(1L).get();
+        
+        orden.setComunalDeposit(comunalDeposit);
+        orden.setEstado(Estado.RESERVADO);
+        ordenRepository.save(orden);
+        DevolverOrdenDTO ordenDTO = new DevolverOrdenDTO(orden.getId(), orden.getPrincipalDeposit().getName(), orden.getEstado(), orden.getItems());
+        return ResponseEntity.ok(ordenDTO);
     }
 
+    /**
+     * Endpoint para marcar una orden como entregada.
+     *
+     * @param orderId El ID de la orden a entregar.
+     * @return ResponseEntity con el estado de la operación. Si la orden no se encuentra,
+     *         retorna un mensaje de error con código de estado 400. Si la orden no está
+     *         en estado "RESERVADO", retorna un mensaje de error con código de estado 400.
+     *         Si la operación es exitosa, retorna un objeto DevolverOrdenDTO con la información
+     *         de la orden y código de estado 200.
+     */
     @PutMapping("/entregar/{orderId}")
     public ResponseEntity<?> entregarOrden(@PathVariable Long orderId) {
-        // Orden orden = ordenRepository.findById(orderId).get();
-        // if (orden.getEstado() != Estado.RESERVADO) {
-        //     return ResponseEntity.badRequest().body("La orden no está reservada");
-        // }
-        // orden.setEstado(Estado.ENTREGADO);
-        // ordenRepository.save(orden);
-        // return ResponseEntity.ok(orden);
-        return ResponseEntity.badRequest().body("No implementado");
+        Optional<Orden> ordenOptional = ordenRepository.findById(orderId);
+        if (!ordenOptional.isPresent()) {
+            return ResponseEntity.badRequest().body("No se encontró la orden");
+        }
+        Orden orden = ordenOptional.get();
+
+        if (orden.getEstado() != Estado.RESERVADO) {
+            return ResponseEntity.badRequest().body("La orden no está reservada");
+        }
+
+        orden.setEstado(Estado.ENTREGADO);
+        ordenRepository.save(orden);
+        DevolverOrdenDTO ordenDTO = new DevolverOrdenDTO(orden.getId(), orden.getPrincipalDeposit().getName(), orden.getEstado(), orden.getItems());
+        return ResponseEntity.ok(ordenDTO);
     }
 
 }

@@ -32,7 +32,7 @@ public class Orden {
     
     private Estado estado;
 
-    @OneToOne
+    @ManyToOne
     private ComunalDeposit comunalDeposit;
 
     public Estado getEstado() {

@@ -64,5 +64,13 @@
         ```
     - Respuesta: Orden creada.
 
+- **PUT api/orden/reservar/{id}**
+    - Descripción: Reserva una orden a nombre del usuario logueado.
+    - Respuesta: Orden reservada
+
+- **PUT api/orden/entregar/{id}**
+    - Descripción: Entrega una orden a nombre del usuario logueado.
+    - Respuesta: Orden entregada
+
 
 
