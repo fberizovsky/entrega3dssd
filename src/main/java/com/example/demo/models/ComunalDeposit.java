@@ -23,10 +23,9 @@ public class ComunalDeposit {
     
     }
 
-    public ComunalDeposit(String name, String password, Long id) {
+    public ComunalDeposit(String name, String password) {
         this.name = name;
         this.password = password;
-        this.id = id;
     }
 
     // Getters y setters
