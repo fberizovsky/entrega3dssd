@@ -2,7 +2,6 @@ package com.example.demo.models;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import com.example.demo.models.enums.Estado;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -28,7 +27,7 @@ public class Orden {
     @JsonIgnore
     private PrincipalDeposit principalDeposit;
 
-    @OneToMany(mappedBy = "orden", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "orden", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Item> items;
     
     private Estado estado;
@@ -49,6 +48,19 @@ public class Orden {
         this.principalDeposit = principalDeposit;
     }
 
+    public Orden(List<Item> items, PrincipalDeposit principalDeposit) {
+        this.estado = Estado.PENDIENTE;
+        this.principalDeposit = principalDeposit;
+        this.items = new ArrayList<>(); // Inicializar la lista
+    
+        // Agregar items a la orden
+        for (Item item : items) {
+            addItem(item);
+        }
+    }
+    
+
+
     public Orden() {
         this.items = new ArrayList<>();
     }
@@ -67,7 +79,7 @@ public class Orden {
 
     // Método para agregar un item a la colecta
     public void addItem(Item item) {
-        items.add(item);
         item.setOrden(this); // Esto establece la relación bidireccional
+        items.add(item);
     }
 }
