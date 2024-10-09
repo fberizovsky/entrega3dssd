@@ -14,6 +14,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 
 @Entity
 public class Orden {
@@ -25,13 +26,14 @@ public class Orden {
 
     @ManyToOne // Relación muchos a uno con orden
     @JsonIgnore
-    private PrincipalDeposit depositoPrincipal;
+    private PrincipalDeposit principalDeposit;
 
     @OneToMany(mappedBy = "orden", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Item> items;
     
     private Estado estado;
 
+    @OneToOne
     private ComunalDeposit comunalDeposit;
 
     public Estado getEstado() {
@@ -42,9 +44,9 @@ public class Orden {
         this.estado = estado;
     }
     
-    public Orden(PrincipalDeposit depositoPrincipal) {
+    public Orden(PrincipalDeposit principalDeposit) {
         this.items = new ArrayList<>();
-        this.depositoPrincipal = depositoPrincipal;
+        this.principalDeposit = principalDeposit;
     }
 
     public Orden() {
@@ -57,8 +59,8 @@ public class Orden {
     public List<Item> getItems() { return items; }
     public void setItems(List<Item> items) { this.items = items; }
 
-    public PrincipalDeposit getPrincipalDeposit() { return depositoPrincipal; }
-    public void setPrincipalDeposit(PrincipalDeposit depositoPrincipal) { this.depositoPrincipal = depositoPrincipal; }
+    public PrincipalDeposit getPrincipalDeposit() { return principalDeposit; }
+    public void setPrincipalDeposit(PrincipalDeposit principalDeposit) { this.principalDeposit = principalDeposit; }
 
     public ComunalDeposit getComunalDeposit() { return comunalDeposit; }
     public void setComunalDeposit(ComunalDeposit comunalDeposit) { this.comunalDeposit = comunalDeposit; }
@@ -66,6 +68,6 @@ public class Orden {
     // Método para agregar un item a la colecta
     public void addItem(Item item) {
         items.add(item);
-        item.setorden(this); // Esto establece la relación bidireccional
+        item.setOrden(this); // Esto establece la relación bidireccional
     }
 }

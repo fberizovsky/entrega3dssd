@@ -30,8 +30,8 @@ public class Item {
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
-    public Orden getorden() { return orden; }
-    public void setorden(Orden orden) { this.orden = orden; }
+    public Orden getOrden() { return orden; }
+    public void setOrden(Orden orden) { this.orden = orden; }
 
     public String getNombre() { return nombre; }
     public void setNombre(String nombre) { this.nombre = nombre; }
