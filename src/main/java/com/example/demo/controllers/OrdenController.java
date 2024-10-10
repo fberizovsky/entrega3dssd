@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -59,7 +60,7 @@ public class OrdenController {
 
         Orden orden = new Orden(crearOrdenDTO.getItems(), depositoPrincipal);
         Orden ordenAGuardar = ordenRepository.save(orden);
-        return ResponseEntity.ok(ordenAGuardar);
+        return new ResponseEntity<>(ordenAGuardar, HttpStatus.CREATED);
     }
 
     
@@ -67,12 +68,15 @@ public class OrdenController {
      * @return una lista de objetos Orden que representan todas las órdenes.
      */
     @GetMapping
-    public List<DevolverOrdenDTO> obtenerOrdenes() {
+    public ResponseEntity<List<DevolverOrdenDTO>> obtenerOrdenes() {
         List<Orden> ordenes = ordenRepository.findAll();
-        return ordenes.stream()
+        List<DevolverOrdenDTO> ordenesDTO = ordenes.stream()
                 .map(orden -> new DevolverOrdenDTO(orden.getId(), orden.getPrincipalDeposit().getName(), orden.getEstado(), orden.getItems()))
                 .collect(Collectors.toList());
+        
+        return new ResponseEntity<>(ordenesDTO, HttpStatus.OK);
     }
+    
 
     /**
      * Reserva una orden cambiando su estado a RESERVADO y asignándole un depósito comunal.
@@ -100,7 +104,7 @@ public class OrdenController {
         orden.setEstado(Estado.RESERVADO);
         ordenRepository.save(orden);
         DevolverOrdenDTO ordenDTO = new DevolverOrdenDTO(orden.getId(), orden.getPrincipalDeposit().getName(), orden.getEstado(), orden.getItems());
-        return ResponseEntity.ok(ordenDTO);
+        return new ResponseEntity<>(ordenDTO, HttpStatus.OK);
     }
 
     /**
@@ -128,7 +132,7 @@ public class OrdenController {
         orden.setEstado(Estado.ENTREGADO);
         ordenRepository.save(orden);
         DevolverOrdenDTO ordenDTO = new DevolverOrdenDTO(orden.getId(), orden.getPrincipalDeposit().getName(), orden.getEstado(), orden.getItems());
-        return ResponseEntity.ok(ordenDTO);
+        return new ResponseEntity<>(ordenDTO, HttpStatus.OK);
     }
 
 }

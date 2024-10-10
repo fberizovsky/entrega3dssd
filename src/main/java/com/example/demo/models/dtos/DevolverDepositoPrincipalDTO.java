@@ -2,6 +2,7 @@ package com.example.demo.models.dtos;
 
 import java.util.List;
 
+import com.example.demo.models.MaterialComunalDeposit;
 import com.example.demo.models.Orden;
 
 public class DevolverDepositoPrincipalDTO {
@@ -12,10 +13,18 @@ public class DevolverDepositoPrincipalDTO {
 
     private List<Orden> orders;
 
+    private List<MaterialComunalDeposit> materialDepositoComunalList;
+
     public DevolverDepositoPrincipalDTO(Long id, String name, List<Orden> orders) {
         this.id = id;
         this.name = name;
         this.orders = orders;
+    }
+
+    public DevolverDepositoPrincipalDTO(Long id, String name) {
+        this.id = id;
+        this.name = name;
+        this.orders = null;
     }
 
 
@@ -41,6 +50,14 @@ public class DevolverDepositoPrincipalDTO {
 
     public void setOrders(List<Orden> orders) {
         this.orders = orders;
+    }
+
+    public List<MaterialComunalDeposit> getMaterialDepositoComunalList() {
+        return materialDepositoComunalList;
+    }
+
+    public void setMaterialDepositoComunalList(List<MaterialComunalDeposit> materialDepositoComunalList) {
+        this.materialDepositoComunalList = materialDepositoComunalList;
     }
 
     

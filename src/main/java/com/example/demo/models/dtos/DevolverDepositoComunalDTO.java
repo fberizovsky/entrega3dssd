@@ -18,6 +18,12 @@ public class DevolverDepositoComunalDTO {
 
     }
 
+    public DevolverDepositoComunalDTO(Long id, String name) {
+        this.id = id;
+        this.name = name;
+        this.orders = null;
+    }
+
     public Long getId() {
         return id;
     }

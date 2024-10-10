@@ -3,6 +3,8 @@ package com.example.demo.models;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.demo.models.enums.Material;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -28,6 +30,9 @@ public class PrincipalDeposit {
 
     @OneToMany(mappedBy = "principalDeposit", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Orden> orders;
+
+    @OneToMany(mappedBy = "depositoPrincipal", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MaterialComunalDeposit> materialDepositoComunalList;
 
 
 
@@ -60,4 +65,19 @@ public class PrincipalDeposit {
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
     
+
+    public List<MaterialComunalDeposit> getMaterialDepositoComunalList() {
+        return materialDepositoComunalList;
+    }
+    public void setMaterialDepositoComunalList(List<MaterialComunalDeposit> materialDepositoComunalList) {
+        this.materialDepositoComunalList = materialDepositoComunalList;
+    }
+
+    public void asignarMaterialADeposito(ComunalDeposit depositoComunal, Material material) {
+        MaterialComunalDeposit relacion = new MaterialComunalDeposit();
+        relacion.setComunalDeposit(depositoComunal);
+        relacion.setMaterial(material);
+        relacion.setDepositoPrincipal(this);
+        materialDepositoComunalList.add(relacion);
+    }
 }

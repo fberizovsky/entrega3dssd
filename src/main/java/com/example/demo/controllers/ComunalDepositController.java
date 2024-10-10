@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,12 +30,12 @@ public class ComunalDepositController {
     /**
      * Método para obtener una lista de depósitos comunales.
      * 
-     * @return Una lista de objetos DevolverDepositoCoomunalDTO que representan los depósitos comunales.
+     * @return Una ResponseEntity que contiene una lista de objetos DevolverDepositoComunalDTO que representan los depósitos comunales.
      */
     @GetMapping
-    public List<DevolverDepositoComunalDTO> obtenerDepositosPrincipales() {
+    public ResponseEntity<List<DevolverDepositoComunalDTO>> obtenerDepositosPrincipales() {
         List<ComunalDeposit> depositosComunales = comunalDepositRepository.findAll();
-        return depositosComunales.stream()
+        List<DevolverDepositoComunalDTO> responseDtoList = depositosComunales.stream()
                 .map(depositoComunal -> new DevolverDepositoComunalDTO(
                         depositoComunal.getId(), 
                         depositoComunal.getName(),
@@ -41,8 +43,8 @@ public class ComunalDepositController {
                             .map(orden -> new DevolverOrdenDTO(orden.getId(), orden.getPrincipalDeposit().getName(), orden.getEstado(), orden.getItems()))
                             .collect(Collectors.toList())))
                 .collect(Collectors.toList());
+        return new ResponseEntity<>(responseDtoList, HttpStatus.OK);
     }
-
 
     /**
      * Crea un nuevo depósito comunal.
@@ -51,9 +53,11 @@ public class ComunalDepositController {
      * @return El objeto ComunalDeposit guardado en el repositorio.
      */
     @PostMapping
-    public ComunalDeposit crearDepositoComunal(@RequestBody CrearDepositoComunalDTO depositoComunalAInsertar) {
+    public ResponseEntity<DevolverDepositoComunalDTO> crearDepositoComunal(@RequestBody CrearDepositoComunalDTO depositoComunalAInsertar) {
         ComunalDeposit depositoComunal = new ComunalDeposit(depositoComunalAInsertar.getName(), depositoComunalAInsertar.getPassword());
-        return comunalDepositRepository.save(depositoComunal);
+        depositoComunal = comunalDepositRepository.save(depositoComunal);
+        DevolverDepositoComunalDTO responseDto = new DevolverDepositoComunalDTO(depositoComunal.getId(), depositoComunal.getName());
+        return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     }
 
 
