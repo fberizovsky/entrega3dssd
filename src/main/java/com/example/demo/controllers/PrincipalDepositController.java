@@ -19,6 +19,7 @@ import com.example.demo.models.dtos.CrearDepositoPrincipalDTO;
 import com.example.demo.models.dtos.CrearMaterialComunalDepositDTO;
 import com.example.demo.models.dtos.DevolverDepositoComunalDTO;
 import com.example.demo.models.dtos.DevolverDepositoPrincipalDTO;
+import com.example.demo.models.dtos.DevolverOrdenDTO;
 import com.example.demo.models.enums.Material;
 import com.example.demo.repository.ComunalDepositRepository;
 import com.example.demo.repository.MaterialComunalDepositRepository;
@@ -54,7 +55,7 @@ public class PrincipalDepositController {
                 .map(depositoPrincipal -> new DevolverDepositoPrincipalDTO(
                         depositoPrincipal.getId(), 
                         depositoPrincipal.getName(), 
-                        depositoPrincipal.getOrders()))
+                        depositoPrincipal.getOrders().stream().map(order -> new DevolverOrdenDTO(order.getId(), order.getPrincipalDeposit().getName(), order.getEstado(), order.getItems())).collect(Collectors.toList())))
                 .collect(Collectors.toList());
         return new ResponseEntity<>(responseDTOs, HttpStatus.OK);
     }
