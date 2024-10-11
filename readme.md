@@ -74,3 +74,13 @@
 
 
 
+# Instalar MYSQL
+https://dev.mysql.com/downloads/file/?id=532678
+
+# Instalar SQL WORKBENCH (Es una interfaz grafica para MySql)
+https://dev.mysql.com/downloads/workbench/
+
+# Copiar el contenido de create_tables.sql en workbench y correr para que se cree la BD con sus tablas
+
+# En applicationproperties reemplazar
+spring.datasource.password=MY_PASSWORD por la contraseña que hayan elegido al instalar mySql.
