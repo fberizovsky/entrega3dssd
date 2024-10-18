@@ -113,7 +113,7 @@ public class PrincipalDepositController {
         List<DevolverDepositoComunalDTO> responseDTOs = depositosPrincipales.stream()
                 .map(materialComunalDeposit -> new DevolverDepositoComunalDTO(
                         materialComunalDeposit.getComunalDeposit().getId(), 
-                        materialComunalDeposit.getComunalDeposit().getName()))
+                        materialComunalDeposit.getComunalDeposit().getUsername()))
                 .collect(Collectors.toList());
         return new ResponseEntity<>(responseDTOs, HttpStatus.OK);
     }

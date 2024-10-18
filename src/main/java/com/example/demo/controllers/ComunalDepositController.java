@@ -38,7 +38,7 @@ public class ComunalDepositController {
         List<DevolverDepositoComunalDTO> responseDtoList = depositosComunales.stream()
                 .map(depositoComunal -> new DevolverDepositoComunalDTO(
                         depositoComunal.getId(), 
-                        depositoComunal.getName(),
+                        depositoComunal.getUsername(),
                         depositoComunal.getOrders().stream()
                             .map(orden -> new DevolverOrdenDTO(orden.getId(), orden.getPrincipalDeposit().getName(), orden.getEstado(), orden.getItems()))
                             .collect(Collectors.toList())))
@@ -56,7 +56,7 @@ public class ComunalDepositController {
     public ResponseEntity<DevolverDepositoComunalDTO> crearDepositoComunal(@RequestBody CrearDepositoComunalDTO depositoComunalAInsertar) {
         ComunalDeposit depositoComunal = new ComunalDeposit(depositoComunalAInsertar.getName(), depositoComunalAInsertar.getPassword());
         depositoComunal = comunalDepositRepository.save(depositoComunal);
-        DevolverDepositoComunalDTO responseDto = new DevolverDepositoComunalDTO(depositoComunal.getId(), depositoComunal.getName());
+        DevolverDepositoComunalDTO responseDto = new DevolverDepositoComunalDTO(depositoComunal.getId(), depositoComunal.getUsername());
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     }
 
