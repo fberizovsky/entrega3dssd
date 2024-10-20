@@ -10,19 +10,19 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import com.example.demo.models.ComunalDeposit;
+import com.example.demo.repository.ComunalDepositRepository;
 
 @Configuration
 public class ApplicationConfigurationComunalDeposit {
-    private final ComunalDeposit comunalDeposit;
+    private final ComunalDepositRepository comunalDepositRepository;
 
-    public ApplicationConfigurationComunalDeposit(ComunalDeposit comunalDeposit) {
-        this.comunalDeposit = comunalDeposit;
+    public ApplicationConfigurationComunalDeposit(ComunalDepositRepository comunalDepositRepository) {
+        this.comunalDepositRepository = comunalDepositRepository;
     }
 
     @Bean
     UserDetailsService userDetailsService() {
-        return username -> comunalDeposit.findByEmail(username)
+        return username -> comunalDepositRepository.findByName(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 

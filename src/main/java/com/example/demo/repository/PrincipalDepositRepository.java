@@ -1,7 +1,6 @@
 package com.example.demo.repository;
 
 
-import com.example.demo.models.ComunalDeposit;
 import com.example.demo.models.PrincipalDeposit;
 
 import java.util.Optional;
@@ -13,5 +12,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PrincipalDepositRepository extends JpaRepository<PrincipalDeposit, Long> {
-    Optional<PrincipalDeposit> findByEmail(String email);
+    Optional<PrincipalDeposit> findByName(String name);
 }

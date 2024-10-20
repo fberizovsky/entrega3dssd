@@ -7,5 +7,5 @@ import java.util.Optional;
 
 @Repository
 public interface ComunalDepositRepository extends JpaRepository<ComunalDeposit, Long> {
-    Optional<ComunalDeposit> findByEmail(String email);
+    Optional<ComunalDeposit> findByName(String name);
 }

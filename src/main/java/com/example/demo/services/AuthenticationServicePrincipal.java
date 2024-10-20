@@ -7,33 +7,33 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.models.PrincipalDeposit;
 import com.example.demo.models.dtos.CrearDepositoPrincipalDTO;
-import com.example.demo.models.dtos.DevolverDepositoPrincipalDTO;
+import com.example.demo.models.dtos.IniciarDepositoPrincipalDTO;
 import com.example.demo.repository.PrincipalDepositRepository;
 
 @Service
-public class AuthenticationService {
-    private final PrincipalDepositRepository principalDepositRepositoryRepository;
+public class AuthenticationServicePrincipal {
+    private final PrincipalDepositRepository principalDepositRepository;
     
     private final PasswordEncoder passwordEncoder;
     
     private final AuthenticationManager authenticationManager;
 
-    public AuthenticationService(
-        PrincipalDepositRepository principalDepositRepositoryRepository,
+    public AuthenticationServicePrincipal(
+        PrincipalDepositRepository principalDepositRepository,
         AuthenticationManager authenticationManager,
         PasswordEncoder passwordEncoder
     ) {
         this.authenticationManager = authenticationManager;
-        this.principalDepositRepositoryRepository = principalDepositRepositoryRepository;
+        this.principalDepositRepository = principalDepositRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
     public PrincipalDeposit signup(CrearDepositoPrincipalDTO input) {
         PrincipalDeposit user = new PrincipalDeposit(input.getName(), passwordEncoder.encode(input.getPassword()));
-        return principalDepositRepositoryRepository.save(user);
+        return principalDepositRepository.save(user);
     }
 
-    public PrincipalDeposit authenticate(DevolverDepositoPrincipalDTO input) {
+    public PrincipalDeposit authenticate(IniciarDepositoPrincipalDTO input) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         input.getName(),
@@ -41,7 +41,7 @@ public class AuthenticationService {
                 )
         );
 
-        return PrincipalDepositRepository.findByEmail(input.getName())
+        return principalDepositRepository.findByName(input.getName())
                 .orElseThrow();
     }
 }
