@@ -32,7 +32,7 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable()) // Desactiva la protección CSRF
         .authorizeHttpRequests(authorize -> authorize
-            .requestMatchers("/api/orden/**").authenticated()
+            .requestMatchers("/api/orden/**").authenticated() //modificando esto podemos establecer los url que seran con autenticación y los que no
             .anyRequest().permitAll()
         )
         .sessionManagement(session -> session
