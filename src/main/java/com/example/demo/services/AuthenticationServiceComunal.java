@@ -1,5 +1,6 @@
 package com.example.demo.services;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -13,15 +14,13 @@ import com.example.demo.repository.ComunalDepositRepository;
 @Service
 public class AuthenticationServiceComunal {
     private final ComunalDepositRepository comunalDepositRepository;
-    
     private final PasswordEncoder passwordEncoder;
-    
     private final AuthenticationManager authenticationManager;
 
     public AuthenticationServiceComunal(
         ComunalDepositRepository comunalDepositRepository,
-        AuthenticationManager authenticationManager,
-        PasswordEncoder passwordEncoder
+        @Qualifier("comunalAuthenticationManager") AuthenticationManager authenticationManager,
+        @Qualifier("comunalPasswordEncoder") PasswordEncoder passwordEncoder
     ) {
         this.authenticationManager = authenticationManager;
         this.comunalDepositRepository = comunalDepositRepository;
