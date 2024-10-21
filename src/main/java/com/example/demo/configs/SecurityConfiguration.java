@@ -30,9 +30,9 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(csrf -> csrf.disable()) // Desactiva la protección CSRF
+        http.csrf(csrf -> csrf.disable()) // Desactiva la protección CSRF, POSIBLEMENTE BORRAR ESTA LINEA EN UN FUTURO
         .authorizeHttpRequests(authorize -> authorize
-            .requestMatchers("/api/orden/**").authenticated() //modificando esto podemos establecer los url que seran con autenticación y los que no
+            .requestMatchers("/users/**").authenticated() //modificando esto podemos establecer los url que seran con autenticación y los que no
             .anyRequest().permitAll()
         )
         .sessionManagement(session -> session
@@ -48,8 +48,8 @@ public class SecurityConfiguration {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.setAllowedOrigins(List.of("http://localhost:3306"));
-        configuration.setAllowedMethods(List.of("GET","POST"));
+        //configuration.setAllowedOrigins(List.of("http://localhost:3306"));
+        configuration.setAllowedMethods(List.of("GET","POST","PUT"));
         configuration.setAllowedHeaders(List.of("Authorization","Content-Type"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

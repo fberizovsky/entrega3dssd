@@ -24,14 +24,22 @@ public class AuthenticationController {
         this.jwtService = jwtService;
         this.authenticationService = authenticationService;
     }
-
+    /**
+     * Metodo que permite registrarse. Se requiere ingresar el email, la password y el fullName.
+     *
+     * @return ResponseEntity con los datos del usuario creado.
+     */
     @PostMapping("/signup")
     public ResponseEntity<User> register(@RequestBody RegisterUserDto registerUserDto) {
         User registeredUser = authenticationService.signup(registerUserDto);
 
         return ResponseEntity.ok(registeredUser);
     }
-
+    /**
+     * Metodo que permite iniciar sesión. Se requiere ingresar el email y la password.
+     * 
+     * @return ResponseEntity con un jwt y tiempo de expiración.
+     */
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginUserDto loginUserDto) {
         User authenticatedUser = authenticationService.authenticate(loginUserDto);
