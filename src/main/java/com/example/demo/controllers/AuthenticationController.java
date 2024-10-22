@@ -30,10 +30,10 @@ public class AuthenticationController {
      * @return ResponseEntity con los datos del usuario creado.
      */
     @PostMapping("/signup")
-    public ResponseEntity<User> register(@RequestBody RegisterUserDto registerUserDto) {
-        User registeredUser = authenticationService.signup(registerUserDto);
+    public ResponseEntity<?> register(@RequestBody RegisterUserDto registerUserDto) {
+        authenticationService.signup(registerUserDto);
 
-        return ResponseEntity.ok(registeredUser);
+        return ResponseEntity.ok().build();
     }
     /**
      * Metodo que permite iniciar sesión. Se requiere ingresar el email y la password.

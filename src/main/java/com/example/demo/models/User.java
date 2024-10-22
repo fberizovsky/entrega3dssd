@@ -6,16 +6,21 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.util.Collection;
 import java.util.List;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import com.example.demo.models.enums.TipoUsuario;
+
 import java.util.Date;
 
+@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "users")
 @Entity
-public class User implements UserDetails {
+public abstract class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
-    private Integer id;
+    private Long id;
 
     @Column(nullable = false)
     private String fullName;
@@ -34,10 +39,18 @@ public class User implements UserDetails {
     @Column(name = "updated_at")
     private Date updatedAt;
 
-    public User(String fullName, String email, String password) {
+    // De depositoComunal
+    @OneToMany(mappedBy = "comunalDeposit", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Orden> AssignedOrders;
+
+    @Column(name = "tipo_usuario")
+    private TipoUsuario tipoUsuario;
+
+    public User(String fullName, String email, String password, TipoUsuario tipoUsuario) {
         this.fullName = fullName;
         this.email = email;
         this.password = password;
+        this.tipoUsuario = tipoUsuario;
     }
 
     public User() {
@@ -45,7 +58,8 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + tipoUsuario.name());
+        return List.of(authority);
     }
 
     @Override
@@ -66,11 +80,11 @@ public class User implements UserDetails {
         this.email = email;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -98,6 +112,14 @@ public class User implements UserDetails {
         this.updatedAt = updatedAt;
     }
 
+    public TipoUsuario getTipoUsuario() {
+        return tipoUsuario;
+    }
+
+    public void setTipoUsuario(TipoUsuario tipoUsuario) {
+        this.tipoUsuario = tipoUsuario;
+    }
+
     @Override
     public boolean isAccountNonExpired() {
         return true;
@@ -117,4 +139,6 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+
 }

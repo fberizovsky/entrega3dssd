@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.models.ComunalDeposit;
 import com.example.demo.models.MaterialComunalDeposit;
 import com.example.demo.models.PrincipalDeposit;
-import com.example.demo.models.dtos.CrearDepositoPrincipalDTO;
 import com.example.demo.models.dtos.CrearMaterialComunalDepositDTO;
 import com.example.demo.models.dtos.DevolverDepositoComunalDTO;
 import com.example.demo.models.dtos.DevolverDepositoPrincipalDTO;
@@ -24,6 +24,7 @@ import com.example.demo.models.enums.Material;
 import com.example.demo.repository.ComunalDepositRepository;
 import com.example.demo.repository.MaterialComunalDepositRepository;
 import com.example.demo.repository.PrincipalDepositRepository;
+import com.example.demo.services.AuthenticationService;
 import com.example.demo.validators.MaterialValidator;
 
 import java.util.stream.Collectors;
@@ -42,6 +43,9 @@ public class PrincipalDepositController {
     @Autowired 
     private MaterialComunalDepositRepository materialComunalDepositRepository;
 
+    @Autowired
+    private AuthenticationService authenticationService;
+
     
     /**
      * Método para obtener una lista de depósitos principales.
@@ -54,31 +58,17 @@ public class PrincipalDepositController {
         List<DevolverDepositoPrincipalDTO> responseDTOs = depositosPrincipales.stream()
                 .map(depositoPrincipal -> new DevolverDepositoPrincipalDTO(
                         depositoPrincipal.getId(), 
-                        depositoPrincipal.getName(), 
-                        depositoPrincipal.getOrders().stream().map(order -> new DevolverOrdenDTO(order.getId(), order.getPrincipalDeposit().getName(), order.getEstado(), order.getItems())).collect(Collectors.toList())))
+                        depositoPrincipal.getFullName(), 
+                        depositoPrincipal.getOrders().stream().map(order -> new DevolverOrdenDTO(order.getId(), order.getPrincipalDeposit().getFullName(), order.getEstado(), order.getItems())).collect(Collectors.toList())))
                 .collect(Collectors.toList());
         return new ResponseEntity<>(responseDTOs, HttpStatus.OK);
     }
 
-    /**
-     * Crea un nuevo depósito principal.
-     *
-     * @param depositoPrincipal El objeto PrincipalDeposit que contiene la información del depósito a crear.
-     * @return El objeto PrincipalDeposit guardado en el repositorio.
-     */
-    @PostMapping
-    public ResponseEntity<DevolverDepositoPrincipalDTO> crearDepositoPrincipal(@RequestBody CrearDepositoPrincipalDTO depositoPrincipalAInsertar) {
-        PrincipalDeposit depositoPrincipal = new PrincipalDeposit(depositoPrincipalAInsertar.getName(), depositoPrincipalAInsertar.getPassword());
-        depositoPrincipal = principalDepositRepository.save(depositoPrincipal);
-        DevolverDepositoPrincipalDTO responseDTO = new DevolverDepositoPrincipalDTO(depositoPrincipal.getId(), depositoPrincipal.getName());
-        return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
-    }
-
+    @PreAuthorize("hasAuthority('ROLE_DEPOSITO_PRINCIPAL')")
     @PostMapping("/asignarMaterial")
     public ResponseEntity<?> asignarMaterial(@RequestBody CrearMaterialComunalDepositDTO request) {
         
-        // Cuando haya auth, se debe obtener el deposito principal del usuario autenticado. La linea siguiente es solo un ejemplo.
-        PrincipalDeposit depositoPrincipal = principalDepositRepository.findById(1L).get();
+        PrincipalDeposit depositoPrincipal =  (PrincipalDeposit) authenticationService.getSessionUser();
 
         if (!MaterialValidator.esMaterialValido(request.getMaterial())) {
             return ResponseEntity.badRequest().body("El material no es válido");
@@ -104,16 +94,18 @@ public class PrincipalDepositController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasAuthority('ROLE_DEPOSITO_PRINCIPAL')")
     @GetMapping("/materiales")
     public ResponseEntity<?> obtenerDepositosComunalesPorMaterial(@RequestParam Material material) {
-        List<MaterialComunalDeposit> depositosPrincipales = materialComunalDepositRepository.findByMaterial(material);
-        // List<ComunalDeposit> depositosComunales = depositosPrincipales.stream()
-        //         .map(MaterialComunalDeposit::getComunalDeposit)
-        //         .collect(Collectors.toList());
+
+        PrincipalDeposit depositoPrincipal =  (PrincipalDeposit) authenticationService.getSessionUser();
+
+        List<MaterialComunalDeposit> depositosPrincipales = materialComunalDepositRepository.findByMaterialAndComunalDepositId(material, depositoPrincipal.getId());
+        
         List<DevolverDepositoComunalDTO> responseDTOs = depositosPrincipales.stream()
                 .map(materialComunalDeposit -> new DevolverDepositoComunalDTO(
                         materialComunalDeposit.getComunalDeposit().getId(), 
-                        materialComunalDeposit.getComunalDeposit().getName()))
+                        materialComunalDeposit.getComunalDeposit().getFullName()))
                 .collect(Collectors.toList());
         return new ResponseEntity<>(responseDTOs, HttpStatus.OK);
     }
