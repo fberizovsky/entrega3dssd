@@ -1,18 +1,38 @@
-C:\Users\Usuario\git\entrega3dssd\src\main\java\com\example\demo\controllers\ComunalDepositController.java
-C:\Users\Usuario\git\entrega3dssd\src\main\java\com\example\demo\controllers\OrdenController.java
-C:\Users\Usuario\git\entrega3dssd\src\main\java\com\example\demo\controllers\PrincipalDepositController.java
-C:\Users\Usuario\git\entrega3dssd\src\main\java\com\example\demo\DemoApplication.java
-C:\Users\Usuario\git\entrega3dssd\src\main\java\com\example\demo\models\ComunalDeposit.java
-C:\Users\Usuario\git\entrega3dssd\src\main\java\com\example\demo\models\dtos\CrearDepositoComunalDTO.java
-C:\Users\Usuario\git\entrega3dssd\src\main\java\com\example\demo\models\dtos\CrearDepositoPrincipalDTO.java
-C:\Users\Usuario\git\entrega3dssd\src\main\java\com\example\demo\models\dtos\CrearOrdenDTO.java
-C:\Users\Usuario\git\entrega3dssd\src\main\java\com\example\demo\models\dtos\DevolverDepositoComunalDTO.java
-C:\Users\Usuario\git\entrega3dssd\src\main\java\com\example\demo\models\dtos\DevolverDepositoPrincipalDTO.java
-C:\Users\Usuario\git\entrega3dssd\src\main\java\com\example\demo\models\dtos\DevolverOrdenDTO.java
-C:\Users\Usuario\git\entrega3dssd\src\main\java\com\example\demo\models\enums\Estado.java
-C:\Users\Usuario\git\entrega3dssd\src\main\java\com\example\demo\models\Item.java
-C:\Users\Usuario\git\entrega3dssd\src\main\java\com\example\demo\models\Orden.java
-C:\Users\Usuario\git\entrega3dssd\src\main\java\com\example\demo\models\PrincipalDeposit.java
-C:\Users\Usuario\git\entrega3dssd\src\main\java\com\example\demo\repository\ComunalDepositRepository.java
-C:\Users\Usuario\git\entrega3dssd\src\main\java\com\example\demo\repository\OrdenRepository.java
-C:\Users\Usuario\git\entrega3dssd\src\main\java\com\example\demo\repository\PrincipalDepositRepository.java
+C:\Users\PC\Documents\mati studio\- quinto\dssd\dssd entrega3\entrega3dssd\src\main\java\com\example\demo\configs\ApplicationConfiguration.java
+C:\Users\PC\Documents\mati studio\- quinto\dssd\dssd entrega3\entrega3dssd\src\main\java\com\example\demo\configs\JwtAuthenticationFilter.java
+C:\Users\PC\Documents\mati studio\- quinto\dssd\dssd entrega3\entrega3dssd\src\main\java\com\example\demo\configs\SecurityConfiguration.java
+C:\Users\PC\Documents\mati studio\- quinto\dssd\dssd entrega3\entrega3dssd\src\main\java\com\example\demo\configs\SwaggerConfig.java
+C:\Users\PC\Documents\mati studio\- quinto\dssd\dssd entrega3\entrega3dssd\src\main\java\com\example\demo\controllers\AuthenticationController.java
+C:\Users\PC\Documents\mati studio\- quinto\dssd\dssd entrega3\entrega3dssd\src\main\java\com\example\demo\controllers\ComunalDepositController.java
+C:\Users\PC\Documents\mati studio\- quinto\dssd\dssd entrega3\entrega3dssd\src\main\java\com\example\demo\controllers\OrdenController.java
+C:\Users\PC\Documents\mati studio\- quinto\dssd\dssd entrega3\entrega3dssd\src\main\java\com\example\demo\controllers\PrincipalDepositController.java
+C:\Users\PC\Documents\mati studio\- quinto\dssd\dssd entrega3\entrega3dssd\src\main\java\com\example\demo\controllers\UserController.java
+C:\Users\PC\Documents\mati studio\- quinto\dssd\dssd entrega3\entrega3dssd\src\main\java\com\example\demo\DemoApplication.java
+C:\Users\PC\Documents\mati studio\- quinto\dssd\dssd entrega3\entrega3dssd\src\main\java\com\example\demo\models\ComunalDeposit.java
+C:\Users\PC\Documents\mati studio\- quinto\dssd\dssd entrega3\entrega3dssd\src\main\java\com\example\demo\models\dtos\CrearDepositoComunalDTO.java
+C:\Users\PC\Documents\mati studio\- quinto\dssd\dssd entrega3\entrega3dssd\src\main\java\com\example\demo\models\dtos\CrearDepositoPrincipalDTO.java
+C:\Users\PC\Documents\mati studio\- quinto\dssd\dssd entrega3\entrega3dssd\src\main\java\com\example\demo\models\dtos\CrearMaterialComunalDepositDTO.java
+C:\Users\PC\Documents\mati studio\- quinto\dssd\dssd entrega3\entrega3dssd\src\main\java\com\example\demo\models\dtos\CrearOrdenDTO.java
+C:\Users\PC\Documents\mati studio\- quinto\dssd\dssd entrega3\entrega3dssd\src\main\java\com\example\demo\models\dtos\DevolverDepositoComunalDTO.java
+C:\Users\PC\Documents\mati studio\- quinto\dssd\dssd entrega3\entrega3dssd\src\main\java\com\example\demo\models\dtos\DevolverDepositoPrincipalDTO.java
+C:\Users\PC\Documents\mati studio\- quinto\dssd\dssd entrega3\entrega3dssd\src\main\java\com\example\demo\models\dtos\DevolverOrdenDTO.java
+C:\Users\PC\Documents\mati studio\- quinto\dssd\dssd entrega3\entrega3dssd\src\main\java\com\example\demo\models\dtos\LoginUserDto.java
+C:\Users\PC\Documents\mati studio\- quinto\dssd\dssd entrega3\entrega3dssd\src\main\java\com\example\demo\models\dtos\RegisterUserDto.java
+C:\Users\PC\Documents\mati studio\- quinto\dssd\dssd entrega3\entrega3dssd\src\main\java\com\example\demo\models\enums\Estado.java
+C:\Users\PC\Documents\mati studio\- quinto\dssd\dssd entrega3\entrega3dssd\src\main\java\com\example\demo\models\enums\Material.java
+C:\Users\PC\Documents\mati studio\- quinto\dssd\dssd entrega3\entrega3dssd\src\main\java\com\example\demo\models\enums\TipoUsuario.java
+C:\Users\PC\Documents\mati studio\- quinto\dssd\dssd entrega3\entrega3dssd\src\main\java\com\example\demo\models\Item.java
+C:\Users\PC\Documents\mati studio\- quinto\dssd\dssd entrega3\entrega3dssd\src\main\java\com\example\demo\models\LoginResponse.java
+C:\Users\PC\Documents\mati studio\- quinto\dssd\dssd entrega3\entrega3dssd\src\main\java\com\example\demo\models\MaterialComunalDeposit.java
+C:\Users\PC\Documents\mati studio\- quinto\dssd\dssd entrega3\entrega3dssd\src\main\java\com\example\demo\models\Orden.java
+C:\Users\PC\Documents\mati studio\- quinto\dssd\dssd entrega3\entrega3dssd\src\main\java\com\example\demo\models\PrincipalDeposit.java
+C:\Users\PC\Documents\mati studio\- quinto\dssd\dssd entrega3\entrega3dssd\src\main\java\com\example\demo\models\User.java
+C:\Users\PC\Documents\mati studio\- quinto\dssd\dssd entrega3\entrega3dssd\src\main\java\com\example\demo\repository\ComunalDepositRepository.java
+C:\Users\PC\Documents\mati studio\- quinto\dssd\dssd entrega3\entrega3dssd\src\main\java\com\example\demo\repository\MaterialComunalDepositRepository.java
+C:\Users\PC\Documents\mati studio\- quinto\dssd\dssd entrega3\entrega3dssd\src\main\java\com\example\demo\repository\OrdenRepository.java
+C:\Users\PC\Documents\mati studio\- quinto\dssd\dssd entrega3\entrega3dssd\src\main\java\com\example\demo\repository\PrincipalDepositRepository.java
+C:\Users\PC\Documents\mati studio\- quinto\dssd\dssd entrega3\entrega3dssd\src\main\java\com\example\demo\repository\UserRepository.java
+C:\Users\PC\Documents\mati studio\- quinto\dssd\dssd entrega3\entrega3dssd\src\main\java\com\example\demo\services\AuthenticationService.java
+C:\Users\PC\Documents\mati studio\- quinto\dssd\dssd entrega3\entrega3dssd\src\main\java\com\example\demo\services\JwtService.java
+C:\Users\PC\Documents\mati studio\- quinto\dssd\dssd entrega3\entrega3dssd\src\main\java\com\example\demo\services\UserService.java
+C:\Users\PC\Documents\mati studio\- quinto\dssd\dssd entrega3\entrega3dssd\src\main\java\com\example\demo\validators\MaterialValidator.java
