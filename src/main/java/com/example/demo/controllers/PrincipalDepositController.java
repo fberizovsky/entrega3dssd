@@ -27,6 +27,8 @@ import com.example.demo.repository.PrincipalDepositRepository;
 import com.example.demo.services.AuthenticationService;
 import com.example.demo.validators.MaterialValidator;
 
+import jakarta.persistence.EntityNotFoundException;
+
 import java.util.stream.Collectors;
 import java.util.Optional;
 
@@ -99,14 +101,35 @@ public class PrincipalDepositController {
     public ResponseEntity<?> obtenerDepositosComunalesPorMaterial(@RequestParam Material material) {
 
         PrincipalDeposit depositoPrincipal =  (PrincipalDeposit) authenticationService.getSessionUser();
+        List<MaterialComunalDeposit> depositos_comunales_list= materialComunalDepositRepository.findByMaterialAndDepositoPrincipal(material, depositoPrincipal);
 
-        List<MaterialComunalDeposit> depositosPrincipales = materialComunalDepositRepository.findByMaterialAndComunalDepositId(material, depositoPrincipal.getId());
-        
-        List<DevolverDepositoComunalDTO> responseDTOs = depositosPrincipales.stream()
+
+        List<DevolverDepositoComunalDTO> responseDTOs = depositos_comunales_list.stream()
                 .map(materialComunalDeposit -> new DevolverDepositoComunalDTO(
                         materialComunalDeposit.getComunalDeposit().getId(), 
                         materialComunalDeposit.getComunalDeposit().getFullName()))
                 .collect(Collectors.toList());
         return new ResponseEntity<>(responseDTOs, HttpStatus.OK);
+        
+        /*List<Optional<ComunalDeposit>> depositosComunales = depositosComunalesIds.stream()
+            .map(id -> comunalDepositRepository.findById(id))
+            .collect(Collectors.toList());
+
+        System.out.println(depositosComunales);
+
+        /*List<DevolverDepositoComunalDTO> responseDTOs = depositosComunales.stream()
+                .map(ComunalDeposit -> new DevolverDepositoComunalDTO(
+                    ComunalDeposit.getId(), 
+                    ComunalDeposit.getFullName()))
+                .collect(Collectors.toList()); 
+
+        /*List<DevolverDepositoComunalDTO> responseDTOs = depositosComunalesIds.stream()
+                .map(deposito -> new DevolverDepositoComunalDTO(
+                    deposito.getId(), 
+                    deposito.getFullName()))
+                .collect(Collectors.toList());*/
+
+        //return new ResponseEntity<>(depositosComunales, HttpStatus.OK);
+        //return new ResponseEntity<>(responseDTOs, HttpStatus.OK);
     }
 }
