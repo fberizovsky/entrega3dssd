@@ -19,6 +19,12 @@ import java.util.List;
 public class SecurityConfiguration {
     private final AuthenticationProvider authenticationProvider;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private static final String[] SWAGGER_WHITELIST = {
+        "/swagger-ui/**",
+        "/v3/api-docs/**",
+        "/swagger-resources/**",
+        "/swagger-resources"
+    };
 
     public SecurityConfiguration(
         JwtAuthenticationFilter jwtAuthenticationFilter,
@@ -32,6 +38,7 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable()) // Desactiva la protección CSRF, POSIBLEMENTE BORRAR ESTA LINEA EN UN FUTURO
         .authorizeHttpRequests(authorize -> authorize
+            .requestMatchers(SWAGGER_WHITELIST).permitAll()
             .requestMatchers("/users/**").authenticated() //modificando esto podemos establecer los url que seran con autenticación y los que no
             .anyRequest().permitAll()
         )
