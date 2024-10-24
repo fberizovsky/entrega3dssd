@@ -27,8 +27,6 @@ import com.example.demo.repository.PrincipalDepositRepository;
 import com.example.demo.services.AuthenticationService;
 import com.example.demo.validators.MaterialValidator;
 
-import jakarta.persistence.EntityNotFoundException;
-
 import java.util.stream.Collectors;
 import java.util.Optional;
 
