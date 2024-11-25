@@ -36,17 +36,18 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(csrf -> csrf.disable()) // Desactiva la protección CSRF, POSIBLEMENTE BORRAR ESTA LINEA EN UN FUTURO
-        .authorizeHttpRequests(authorize -> authorize
-            .requestMatchers(SWAGGER_WHITELIST).permitAll()
-            .requestMatchers("/users/**").authenticated() //modificando esto podemos establecer los url que seran con autenticación y los que no
-            .anyRequest().permitAll()
-        )
-        .sessionManagement(session -> session
-            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        )
-        .authenticationProvider(authenticationProvider)
-        .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        http.csrf(csrf -> csrf.disable()) // Desactiva CSRF
+            .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Habilita CORS
+            .authorizeHttpRequests(authorize -> authorize
+                .requestMatchers(SWAGGER_WHITELIST).permitAll()
+                .requestMatchers("/users/**").authenticated()
+                .anyRequest().permitAll()
+            )
+            .sessionManagement(session -> session
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            )
+            .authenticationProvider(authenticationProvider)
+            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
@@ -54,19 +55,14 @@ public class SecurityConfiguration {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        
-        
-        configuration.setAllowedOrigins(List.of("*"));
-        //configuration.setAllowedOrigins(List.of("http://localhost:3306"));
+        configuration.setAllowedOrigins(List.of("http://localhost:5173")); // Cambiar "*" por un origen específico
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(List.of("Authorization","Content-Type"));
-        configuration.setAllowCredentials(true);
-
+        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+        configuration.addExposedHeader("Authorization"); // Exponer encabezados opcionales
+        configuration.setAllowCredentials(true); // Permitir credenciales compartidas
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-
-        source.registerCorsConfiguration("/**",configuration);
-
+        source.registerCorsConfiguration("/**", configuration);
         return source;
     }
 }
