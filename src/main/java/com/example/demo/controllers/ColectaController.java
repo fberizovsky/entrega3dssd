@@ -39,7 +39,6 @@ public class ColectaController {
      * @param crearColectaDTO Objeto que contiene los datos necesarios para crear una colecta.
      * @return ResponseEntity con la colecta creada o un mensaje de error si no se encuentra el depósito comunal.
      */
-    @PreAuthorize("hasAuthority('ROLE_RECOLECTOR')")
     @PostMapping
     public ResponseEntity<?> crearColecta(@RequestBody CrearColectaDTO crearColectaDTO) {
         Optional<ComunalDeposit> depositoOptional = depositoComunalRepository.findById(crearColectaDTO.getIdDepositoComunal());
