@@ -12,6 +12,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Configuration
@@ -19,6 +20,7 @@ import java.util.List;
 public class SecurityConfiguration {
     private final AuthenticationProvider authenticationProvider;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+
     private static final String[] SWAGGER_WHITELIST = {
         "/swagger-ui/**",
         "/v3/api-docs/**",
@@ -36,17 +38,21 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(csrf -> csrf.disable()) // Desactiva la protección CSRF, POSIBLEMENTE BORRAR ESTA LINEA EN UN FUTURO
-        .authorizeHttpRequests(authorize -> authorize
-            .requestMatchers(SWAGGER_WHITELIST).permitAll()
-            .requestMatchers("/users/**").authenticated() //modificando esto podemos establecer los url que seran con autenticación y los que no
-            .anyRequest().permitAll()
-        )
-        .sessionManagement(session -> session
-            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        )
-        .authenticationProvider(authenticationProvider)
-        .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        http
+            .csrf(csrf -> csrf.disable()) // Desactiva CSRF
+            .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Habilita CORS
+            .authorizeHttpRequests(authorize -> authorize
+                .requestMatchers(SWAGGER_WHITELIST).permitAll() // Permite acceso a Swagger sin autenticación
+                .requestMatchers("/users/**").authenticated() // Protege los endpoints /users/**
+                .requestMatchers("/auth/**").permitAll() // Permite acceso sin autenticación a /auth/**
+                .requestMatchers("/api/colecta").permitAll()
+                .anyRequest().permitAll() // Permite acceso al resto de las rutas
+            )
+            .sessionManagement(session -> session
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // No mantiene sesiones
+            )
+            .authenticationProvider(authenticationProvider) // Configura el proveedor de autenticación
+            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); // Añade el filtro JWT
 
         return http.build();
     }
@@ -54,15 +60,14 @@ public class SecurityConfiguration {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-
-        //configuration.setAllowedOrigins(List.of("http://localhost:3306"));
-        configuration.setAllowedMethods(List.of("GET","POST","PUT"));
-        configuration.setAllowedHeaders(List.of("Authorization","Content-Type"));
+        configuration.setAllowedOrigins(List.of("http://localhost:5173")); // Permitir el origen del frontend
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Métodos permitidos
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type")); // Encabezados permitidos
+        configuration.addExposedHeader("Authorization"); // Exponer encabezado de autorización
+        configuration.setAllowCredentials(true); // Permitir envío de credenciales
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-
-        source.registerCorsConfiguration("/**",configuration);
-
+        source.registerCorsConfiguration("/**", configuration); // Aplica configuración a todas las rutas
         return source;
     }
 }
