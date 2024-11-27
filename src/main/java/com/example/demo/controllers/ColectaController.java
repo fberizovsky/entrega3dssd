@@ -27,7 +27,7 @@ public class ColectaController {
     @Autowired
     private ComunalDepositRepository depositoComunalRepository;
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<?> crearColecta(@RequestBody CrearColectaDTO crearColectaDTO) {
         Optional<ComunalDeposit> depositoOptional = depositoComunalRepository.findById(crearColectaDTO.getIdDepositoComunal());
         if (!depositoOptional.isPresent()) {
@@ -59,7 +59,7 @@ public class ColectaController {
      *
      * @return ResponseEntity con una lista de colectas.
      */
-    @GetMapping("/colecta")
+    @GetMapping
     public ResponseEntity<List<DevolverColectaDTO>> obtenerColectas() {
         List<Colecta> colectas = colectaRepository.findAll();
         List<DevolverColectaDTO> colectasDTO = colectas.stream()
