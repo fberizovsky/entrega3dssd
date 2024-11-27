@@ -7,9 +7,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,10 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.models.*;
 import com.example.demo.models.dtos.*;
 import com.example.demo.repository.*;
-import com.example.demo.services.AuthenticationService;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/colecta")
 public class ColectaController {
 
     @Autowired
@@ -30,16 +27,7 @@ public class ColectaController {
     @Autowired
     private ComunalDepositRepository depositoComunalRepository;
 
-    @Autowired
-    private AuthenticationService authenticationService;
-
-    /**
-     * Crea una nueva colecta basada en los datos proporcionados en el DTO CrearColectaDTO.
-     *
-     * @param crearColectaDTO Objeto que contiene los datos necesarios para crear una colecta.
-     * @return ResponseEntity con la colecta creada o un mensaje de error si no se encuentra el depósito comunal.
-     */
-    @PostMapping("/colecta")
+    @PostMapping()
     public ResponseEntity<?> crearColecta(@RequestBody CrearColectaDTO crearColectaDTO) {
         Optional<ComunalDeposit> depositoOptional = depositoComunalRepository.findById(crearColectaDTO.getIdDepositoComunal());
         if (!depositoOptional.isPresent()) {
@@ -98,5 +86,10 @@ public class ColectaController {
                 .collect(Collectors.toList());
 
         return new ResponseEntity<>(colectasDTO, HttpStatus.OK);
+    }
+
+    @GetMapping("/test")
+    public ResponseEntity<String> testEndpoint() {
+        return ResponseEntity.ok("¡El endpoint está funcionando!");
     }
 }
