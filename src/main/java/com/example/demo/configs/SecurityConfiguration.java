@@ -45,6 +45,7 @@ public class SecurityConfiguration {
                 .requestMatchers(SWAGGER_WHITELIST).permitAll() // Permite acceso a Swagger sin autenticación
                 .requestMatchers("/users/**").authenticated() // Protege los endpoints /users/**
                 .requestMatchers("/auth/**").permitAll() // Permite acceso sin autenticación a /auth/**
+                .requestMatchers("/api/colecta").permitAll()
                 .anyRequest().permitAll() // Permite acceso al resto de las rutas
             )
             .sessionManagement(session -> session

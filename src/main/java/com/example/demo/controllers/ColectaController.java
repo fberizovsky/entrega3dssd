@@ -21,7 +21,7 @@ import com.example.demo.repository.*;
 import com.example.demo.services.AuthenticationService;
 
 @RestController
-@RequestMapping("/api/colecta")
+@RequestMapping("/api")
 public class ColectaController {
 
     @Autowired
@@ -39,7 +39,7 @@ public class ColectaController {
      * @param crearColectaDTO Objeto que contiene los datos necesarios para crear una colecta.
      * @return ResponseEntity con la colecta creada o un mensaje de error si no se encuentra el depósito comunal.
      */
-    @PostMapping
+    @PostMapping("/colecta")
     public ResponseEntity<?> crearColecta(@RequestBody CrearColectaDTO crearColectaDTO) {
         Optional<ComunalDeposit> depositoOptional = depositoComunalRepository.findById(crearColectaDTO.getIdDepositoComunal());
         if (!depositoOptional.isPresent()) {
@@ -71,7 +71,7 @@ public class ColectaController {
      *
      * @return ResponseEntity con una lista de colectas.
      */
-    @GetMapping
+    @GetMapping("/colecta")
     public ResponseEntity<List<DevolverColectaDTO>> obtenerColectas() {
         List<Colecta> colectas = colectaRepository.findAll();
         List<DevolverColectaDTO> colectasDTO = colectas.stream()
