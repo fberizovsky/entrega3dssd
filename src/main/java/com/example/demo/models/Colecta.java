@@ -36,7 +36,6 @@ public class Colecta {
     @JsonIgnore
     private ComunalDeposit depositoComunal;
 
-    @Enumerated(EnumType.STRING) // Para que el Enum se almacene como cadena en la base de datos
     private EstadoColecta estado = EstadoColecta.CREADO; // Valor por defecto es CREADO
 
     public Colecta() {
