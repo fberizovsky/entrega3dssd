@@ -30,7 +30,7 @@ public class ComunalDepositController {
      * 
      * @return Una ResponseEntity que contiene una lista de objetos DevolverDepositoComunalDTO que representan los depósitos comunales.
      */
-    @PreAuthorize("hasAuthority('ROLE_DEPOSITO_PRINCIPAL')")
+    @PreAuthorize("true")
     @GetMapping
     public ResponseEntity<List<DevolverDepositoComunalDTO>> obtenerDepositosPrincipales() {
         List<ComunalDeposit> depositosComunales = comunalDepositRepository.findAll();

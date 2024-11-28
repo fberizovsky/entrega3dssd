@@ -1,25 +1,30 @@
 package com.example.demo.models.dtos;
 
+import java.lang.management.LockInfo;
 import java.util.List;
+
+import com.example.demo.models.enums.EstadoColecta;
 
 public class DevolverColectaDTO {
 
     private Long id;
     private String nombreRecolector;
     private String dniRecolector;
-    private DevolverDepositoComunalDTO depositoComunal;
+    private Long idDepositoComunal;
+    private EstadoColecta estado;
     private List<ItemRecolectadoDTO> items;
    
     
 
     public DevolverColectaDTO(Long id, String nombreRecolector, String dniRecolector,
-			DevolverDepositoComunalDTO depositoComunal, List<ItemRecolectadoDTO> items) {
+			Long depositoComunal, List<ItemRecolectadoDTO> items, EstadoColecta estado) {
 		super();
 		this.id = id;
 		this.nombreRecolector = nombreRecolector;
 		this.dniRecolector = dniRecolector;
-		this.depositoComunal = depositoComunal;
+		this.idDepositoComunal = depositoComunal;
 		this.items = items;
+        this.estado = estado;
 	}
 
 	// Getters y setters
@@ -47,12 +52,12 @@ public class DevolverColectaDTO {
         this.dniRecolector = dniRecolector;
     }
 
-    public DevolverDepositoComunalDTO getDepositoComunal() {
-        return depositoComunal;
+    public Long getidDepositoComunal() {
+        return idDepositoComunal;
     }
 
-    public void setDepositoComunal(DevolverDepositoComunalDTO depositoComunal) {
-        this.depositoComunal = depositoComunal;
+    public void setDepositoComunal(Long depositoComunal) {
+        this.idDepositoComunal = depositoComunal;
     }
 
     public List<ItemRecolectadoDTO> getItems() {
@@ -61,6 +66,14 @@ public class DevolverColectaDTO {
 
     public void setItems(List<ItemRecolectadoDTO> items) {
         this.items = items;
+    }
+
+    public void setEstado(EstadoColecta estado){
+        this.estado = estado;
+    }
+
+    public EstadoColecta getEstado() {
+        return estado;
     }
 
     // DTO anidado para los ítems

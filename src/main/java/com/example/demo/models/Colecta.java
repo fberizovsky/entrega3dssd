@@ -3,11 +3,14 @@ package com.example.demo.models;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.demo.models.enums.EstadoColecta;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -23,8 +26,8 @@ public class Colecta {
     @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private Long id;
 
-    private String nombreRecolector;  // Aquí agregamos el campo para el nombre del recolector
-    private String dniRecolector;     // Aquí agregamos el campo para el DNI del recolector
+    private String nombreRecolector; // Aquí agregamos el campo para el nombre del recolector
+    private String dniRecolector; // Aquí agregamos el campo para el DNI del recolector
 
     @OneToMany(mappedBy = "colecta", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ItemRecolectado> itemsRecolectados;
@@ -32,6 +35,9 @@ public class Colecta {
     @ManyToOne(fetch = FetchType.LAZY) // Relación inversa: muchas colectas pueden compartir un depósito comunal
     @JsonIgnore
     private ComunalDeposit depositoComunal;
+
+    @Enumerated(EnumType.STRING) // Para que el Enum se almacene como cadena en la base de datos
+    private EstadoColecta estado = EstadoColecta.CREADO; // Valor por defecto es CREADO
 
     public Colecta() {
         this.itemsRecolectados = new ArrayList<>();
@@ -106,6 +112,15 @@ public class Colecta {
             item.setColecta(null); // Eliminar relación bidireccional
         }
         this.itemsRecolectados.clear();
+    }
+
+    // Getters y Setters
+    public EstadoColecta getEstado() {
+        return estado;
+    }
+
+    public void setEstado(EstadoColecta estado) {
+        this.estado = estado;
     }
 
     @Override

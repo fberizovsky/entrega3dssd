@@ -15,10 +15,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.models.Colecta;
 import com.example.demo.models.ComunalDeposit;
 import com.example.demo.models.Orden;
 import com.example.demo.models.PrincipalDeposit;
 import com.example.demo.models.dtos.CrearOrdenDTO;
+import com.example.demo.models.dtos.DevolverColectaDTO;
+import com.example.demo.models.dtos.DevolverDepositoComunalDTO;
 import com.example.demo.models.dtos.DevolverOrdenDTO;
 import com.example.demo.models.enums.Estado;
 import com.example.demo.repository.OrdenRepository;
@@ -26,32 +29,30 @@ import com.example.demo.services.AuthenticationService;
 
 import java.util.stream.Collectors;
 
-
-
 @RestController
 @RequestMapping("/api/orden")
 public class OrdenController {
-    
+
     @Autowired
     private OrdenRepository ordenRepository;
 
     @Autowired
     private AuthenticationService authenticationService;
 
-   
-
     /**
-     * Crea una nueva orden basada en los datos proporcionados en el DTO CrearOrdenDTO.
+     * Crea una nueva orden basada en los datos proporcionados en el DTO
+     * CrearOrdenDTO.
      *
-     * @param crearOrdenDTO Objeto que contiene los datos necesarios para crear una nueva orden.
-     * @return ResponseEntity con la orden creada si la operación es exitosa, o un mensaje de error si no se encuentra el depósito principal.
+     * @param crearOrdenDTO Objeto que contiene los datos necesarios para crear una
+     *                      nueva orden.
+     * @return ResponseEntity con la orden creada si la operación es exitosa, o un
+     *         mensaje de error si no se encuentra el depósito principal.
      */
     @PreAuthorize("hasAuthority('ROLE_DEPOSITO_PRINCIPAL')")
     @PostMapping
     public ResponseEntity<?> crearOrden(@RequestBody CrearOrdenDTO crearOrdenDTO) {
 
-        PrincipalDeposit principalDeposit =  (PrincipalDeposit) authenticationService.getSessionUser();
-        
+        PrincipalDeposit principalDeposit = (PrincipalDeposit) authenticationService.getSessionUser();
 
         Orden orden = new Orden(crearOrdenDTO.getItems(), principalDeposit);
         orden.setPrincipalDeposit(principalDeposit);
@@ -59,7 +60,6 @@ public class OrdenController {
         return new ResponseEntity<>(ordenAGuardar, HttpStatus.CREATED);
     }
 
-    
     /**
      * @return una lista de objetos Orden que representan todas las órdenes.
      */
@@ -67,18 +67,20 @@ public class OrdenController {
     public ResponseEntity<List<DevolverOrdenDTO>> obtenerOrdenes() {
         List<Orden> ordenes = ordenRepository.findAll();
         List<DevolverOrdenDTO> ordenesDTO = ordenes.stream()
-                .map(orden -> new DevolverOrdenDTO(orden.getId(), orden.getPrincipalDeposit().getFullName(), orden.getEstado(), orden.getItems()))
+                .map(orden -> new DevolverOrdenDTO(orden.getId(), orden.getPrincipalDeposit().getFullName(),
+                        orden.getEstado(), orden.getItems()))
                 .collect(Collectors.toList());
-        
+
         return new ResponseEntity<>(ordenesDTO, HttpStatus.OK);
     }
-    
 
     /**
-     * Reserva una orden cambiando su estado a RESERVADO y asignándole un depósito comunal.
+     * Reserva una orden cambiando su estado a RESERVADO y asignándole un depósito
+     * comunal.
      *
      * @param orderId El ID de la orden a reservar.
-     * @return ResponseEntity con un mensaje de error si la orden no se encuentra o no está en estado PENDIENTE,
+     * @return ResponseEntity con un mensaje de error si la orden no se encuentra o
+     *         no está en estado PENDIENTE,
      *         o con un objeto DevolverOrdenDTO si la operación es exitosa.
      */
     @PreAuthorize("hasAuthority('ROLE_DEPOSITO_COMUNAL')")
@@ -95,11 +97,12 @@ public class OrdenController {
         }
 
         ComunalDeposit comunalDeposit = (ComunalDeposit) authenticationService.getSessionUser();
-        
+
         orden.setComunalDeposit(comunalDeposit);
         orden.setEstado(Estado.RESERVADO);
         ordenRepository.save(orden);
-        DevolverOrdenDTO ordenDTO = new DevolverOrdenDTO(orden.getId(), orden.getPrincipalDeposit().getFullName(), orden.getEstado(), orden.getItems());
+        DevolverOrdenDTO ordenDTO = new DevolverOrdenDTO(orden.getId(), orden.getPrincipalDeposit().getFullName(),
+                orden.getEstado(), orden.getItems());
         return new ResponseEntity<>(ordenDTO, HttpStatus.OK);
     }
 
@@ -107,10 +110,14 @@ public class OrdenController {
      * Endpoint para marcar una orden como entregada.
      *
      * @param orderId El ID de la orden a entregar.
-     * @return ResponseEntity con el estado de la operación. Si la orden no se encuentra,
-     *         retorna un mensaje de error con código de estado 400. Si la orden no está
-     *         en estado "RESERVADO", retorna un mensaje de error con código de estado 400.
-     *         Si la operación es exitosa, retorna un objeto DevolverOrdenDTO con la información
+     * @return ResponseEntity con el estado de la operación. Si la orden no se
+     *         encuentra,
+     *         retorna un mensaje de error con código de estado 400. Si la orden no
+     *         está
+     *         en estado "RESERVADO", retorna un mensaje de error con código de
+     *         estado 400.
+     *         Si la operación es exitosa, retorna un objeto DevolverOrdenDTO con la
+     *         información
      *         de la orden y código de estado 200.
      */
     @PreAuthorize("hasAuthority('ROLE_DEPOSITO_COMUNAL')")
@@ -119,7 +126,6 @@ public class OrdenController {
 
         ComunalDeposit comunalDeposit = (ComunalDeposit) authenticationService.getSessionUser();
         Optional<Orden> ordenOptional = ordenRepository.findById(orderId);
-        
 
         if (!ordenOptional.isPresent()) {
             return ResponseEntity.badRequest().body("No se encontró la orden");
@@ -136,8 +142,71 @@ public class OrdenController {
 
         orden.setEstado(Estado.ENTREGADO);
         ordenRepository.save(orden);
-        DevolverOrdenDTO ordenDTO = new DevolverOrdenDTO(orden.getId(), orden.getPrincipalDeposit().getFullName(), orden.getEstado(), orden.getItems());
+        DevolverOrdenDTO ordenDTO = new DevolverOrdenDTO(orden.getId(), orden.getPrincipalDeposit().getFullName(),
+                orden.getEstado(), orden.getItems());
         return new ResponseEntity<>(ordenDTO, HttpStatus.OK);
+    }
+
+    @GetMapping("/pendientes")
+    public ResponseEntity<List<DevolverOrdenDTO>> obtenerOrdenesPendientes() {
+        // Consultar órdenes con estado PENDIENTE
+        List<Orden> ordenesPendientes = ordenRepository.findByEstado(Estado.PENDIENTE);
+
+        // Transformar a DTO
+        List<DevolverOrdenDTO> ordenesPendientesDTO = ordenesPendientes.stream()
+                .map(orden -> new DevolverOrdenDTO(
+                        orden.getId(),
+                        orden.getPrincipalDeposit().getFullName(),
+                        orden.getEstado(), // Convertir enum a String
+                        orden.getItems()))
+                .collect(Collectors.toList());
+
+        // Devolver respuesta
+        return ResponseEntity.ok(ordenesPendientesDTO);
+    }
+
+    @PreAuthorize("hasAuthority('ROLE_DEPOSITO_COMUNAL')")
+    @GetMapping("/reservadas")
+    public ResponseEntity<List<DevolverOrdenDTO>> obtenerOrdenesReservadas() {
+        // Obtener el usuario de la sesión
+        ComunalDeposit comunalDeposit = (ComunalDeposit) authenticationService.getSessionUser();
+
+        // Consultar órdenes con estado RESERVADO para el depósito comunal logueado
+        List<Orden> ordenesReservadas = ordenRepository.findByEstadoAndComunalDeposit(Estado.RESERVADO, comunalDeposit);
+
+        // Transformar a DTO
+        List<DevolverOrdenDTO> ordenesReservadasDTO = ordenesReservadas.stream()
+                .map(orden -> new DevolverOrdenDTO(
+                        orden.getId(),
+                        orden.getPrincipalDeposit().getFullName(),
+                        orden.getEstado(),
+                        orden.getItems()))
+                .collect(Collectors.toList());
+
+        // Devolver respuesta
+        return ResponseEntity.ok(ordenesReservadasDTO);
+    }
+
+    @PreAuthorize("hasAuthority('ROLE_DEPOSITO_PRINCIPAL')")
+    @GetMapping("/misOrdenes")
+    public ResponseEntity<List<DevolverOrdenDTO>> obtenerOrdenesPorDepositoPrincipal() {
+        // Obtener el depósito principal asociado al usuario autenticado
+        PrincipalDeposit depositoPrincipal = (PrincipalDeposit) authenticationService.getSessionUser();
+
+        // Consultar las órdenes que están asociadas al depósito principal autenticado
+        List<Orden> ordenes = ordenRepository.findByPrincipalDeposit(depositoPrincipal);
+
+        // Transformar las órdenes a DTO
+        List<DevolverOrdenDTO> ordenesDTO = ordenes.stream()
+                .map(orden -> new DevolverOrdenDTO(
+                        orden.getId(),
+                        orden.getPrincipalDeposit().getFullName(),
+                        orden.getEstado(),
+                        orden.getItems()))
+                .collect(Collectors.toList());
+
+        // Devolver la lista de órdenes en formato DTO
+        return ResponseEntity.ok(ordenesDTO);
     }
 
 }

@@ -78,6 +78,11 @@
 			<artifactId>postgresql</artifactId>
 			<version>42.6.0</version> <!-- Versión recomendada -->
 		</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>8.0.33</version> <!-- Verifica que sea la última versión disponible -->
+		</dependency>
 </dependencies>
 
 	<build>
