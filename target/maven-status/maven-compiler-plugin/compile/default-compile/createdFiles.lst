@@ -8,6 +8,7 @@ com\example\demo\configs\JwtAuthenticationFilter.class
 com\example\demo\configs\ApplicationConfiguration.class
 com\example\demo\models\dtos\CrearMaterialComunalDepositDTO.class
 com\example\demo\models\MaterialComunalDeposit.class
+com\example\demo\controllers\PruebaControler.class
 com\example\demo\controllers\OrdenController.class
 com\example\demo\controllers\PrincipalDepositController.class
 com\example\demo\models\dtos\DevolverDepositoComunalDTO.class
@@ -16,6 +17,7 @@ com\example\demo\models\User.class
 com\example\demo\models\ComunalDeposit.class
 com\example\demo\models\enums\Material.class
 com\example\demo\models\dtos\CrearColectaDTO.class
+com\example\demo\controllers\ItemRecolectadoController.class
 com\example\demo\models\ItemRecolectado.class
 com\example\demo\configs\SecurityConfiguration.class
 com\example\demo\controllers\AuthenticationController.class
@@ -31,10 +33,12 @@ com\example\demo\models\dtos\DevolverColectaDTO.class
 com\example\demo\models\dtos\CrearColectaDTO$ItemRecolectadoDTO.class
 com\example\demo\models\Orden.class
 com\example\demo\repository\UserRepository.class
+com\example\demo\controllers\ComunalDepositController.class
 com\example\demo\models\dtos\DevolverDepositoPrincipalDTO.class
 com\example\demo\models\dtos\CrearOrdenDTO.class
 com\example\demo\services\UserService.class
 com\example\demo\models\dtos\CrearDepositoPrincipalDTO.class
+com\example\demo\models\enums\EstadoColecta.class
 com\example\demo\models\Item.class
 com\example\demo\models\enums\TipoUsuario.class
 com\example\demo\models\dtos\RegisterUserDto.class
