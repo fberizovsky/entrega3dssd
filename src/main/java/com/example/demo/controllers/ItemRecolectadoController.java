@@ -24,7 +24,7 @@ public class ItemRecolectadoController {
      * @return ResponseEntity con el resultado de la operación.
      */
     @PreAuthorize("hasAuthority('ROLE_DEPOSITO_COMUNAL')")
-    @PutMapping("/{id}")
+    @PutMapping("/modificar{id}")
     public ResponseEntity<?> actualizarCantidad(
             @PathVariable Long id,
             @RequestBody int cantidad
